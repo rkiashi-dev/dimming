@@ -14,9 +14,11 @@ namespace HostSimulator
 {
     public partial class FrmMain : Form
     {
-        private UdpClient receiver;
-        private UdpClient sender;
-
+        private UdpClient udpReceiver;
+        private UdpClient udpSender;
+        private TcpListener tcpAcceptor;
+        private TcpClient tcpSender;
+        private TcpClient tcpReceiver;
 
         public FrmMain()
         {
@@ -35,12 +37,21 @@ namespace HostSimulator
             this.Log.AppendText("開始> " + this.RemoteAddress.Text + ":" + this.RemotePort.Text + " @ Local Port " + this.ListenPort.Text + System.Environment.NewLine);
             this.Log.AppendText("開始> " + this.Protocol.SelectedItem + System.Environment.NewLine);
 
-            switch( this.Protocol.SelectedItem )
+            IPEndPoint remote = new IPEndPoint(IPAddress.Parse(this.RemoteAddress.Text), int.Parse(this.RemotePort.Text));
+            switch ( this.Protocol.SelectedItem )
             {
                 case "UDP":
-                    this.receiver = new UdpClient(int.Parse(this.ListenPort.Text));
-                    IPEndPoint remote = new IPEndPoint(IPAddress.Parse(this.RemoteAddress.Text), int.Parse(this.RemotePort.Text));
-                    this.sender = new UdpClient(remote);
+                    this.udpReceiver = new UdpClient(int.Parse(this.ListenPort.Text));
+                    this.udpSender = new UdpClient(remote);
+                    break;
+                case "TCP":
+                    this.tcpAcceptor = new TcpListener(int.Parse(this.ListenPort.Text));
+                    this.tcpSender = new TcpClient();
+                    this.Log.AppendText("開始> クライアントへの接続" + System.Environment.NewLine);
+                    this.tcpSender.Connect(remote);
+                    this.Log.AppendText("開始> クライアントからの接続待機" + System.Environment.NewLine);
+                    this.tcpAcceptor.Start();
+                    this.tcpReceiver = this.tcpAcceptor.AcceptTcpClient();
                     break;
                 default:
                     this.Log.AppendText("開始> " + this.Protocol.SelectedItem + " はサポートされていません" + System.Environment.NewLine);
@@ -48,16 +59,40 @@ namespace HostSimulator
             }
         }
 
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        private void SendReceive(byte[] data)
         {
+            this.Log.AppendText("送信> " + ASCIIEncoding.ASCII.GetString(data) + System.Environment.NewLine);
+            byte[] ret = null;
+            switch ( this.Protocol.SelectedItem )
+            {
+                case "UDP":
+                    this.udpSender.Send(data, data.Length);
 
+                    IPEndPoint remote = null;
+                    this.udpReceiver.Receive(ref remote);
+                    this.Log.AppendText("受信> " + ASCIIEncoding.ASCII.GetString(ret) + System.Environment.NewLine);
+                    break;
+                case "TCP":
+                    NetworkStream input = this.tcpSender.GetStream();
+                    input.Write(data, 0, data.Length);
+
+                    NetworkStream output = this.tcpReceiver.GetStream();
+                    byte[] tmp = new byte[512];
+                    int len = output.Read(tmp, 0, 512);
+                    ret = new byte[len];
+                    Array.Copy(tmp, 0, ret, 0, len);
+                    this.Log.AppendText("受信> " + ASCIIEncoding.ASCII.GetString(ret) + System.Environment.NewLine);
+                    break;
+                default:
+                    this.Log.AppendText("送受信> " + this.Protocol.SelectedItem + " はサポートされていません" + System.Environment.NewLine);
+                    return;
+            }
         }
 
         private void Btn調光データ_Click(object sender, EventArgs e)
         {
             byte[] data = SendMessage.調光データ設定電文(int.Parse(this.Channel調光.Text), byte.Parse(this.Data調光.Text)).GetMessage();
-            this.sender.Send(data, data.Length);
-            this.ReceiveData();
+            this.SendReceive(data);
         }
 
         private void Btn発光モード_Click(object sender, EventArgs e)
@@ -65,36 +100,26 @@ namespace HostSimulator
             発光モード mode = (発光モード)Enum.Parse(typeof(発光モード), mode発光.Text);
             ストロボ val = (ストロボ)Enum.Parse(typeof(ストロボ), value発光.Text);
             byte[] data = SendMessage.発光モード設定電文(int.Parse(this.Channel発光.Text), mode, val).GetMessage();
-            this.sender.Send(data, data.Length);
-            this.ReceiveData();
+            this.SendReceive(data);
         }
 
         private void BtnONOFF_Click(object sender, EventArgs e)
         {
             byte[] data = SendMessage.ONOFF設定電文(int.Parse(this.ChannelONOFF.Text), this.dataONOFF.Checked).GetMessage();
-            this.sender.Send(data, data.Length);
-            this.ReceiveData();
+            this.SendReceive(data);
         }
 
         private void Btn設定状態_Click(object sender, EventArgs e)
         {
             byte[] data = SendMessage.設定状態確認電文(int.Parse(this.Channel設定.Text)).GetMessage();
-            this.sender.Send(data, data.Length);
-            this.ReceiveData();
+            this.SendReceive(data);
         }
 
         private void Btn状態確認_Click(object sender, EventArgs e)
         {
             byte[] data = SendMessage.状態確認電文().GetMessage();
-            this.sender.Send(data, data.Length);
-            this.ReceiveData();
+            this.SendReceive(data);
         }
 
-        private void ReceiveData()
-        {
-            IPEndPoint remote = null;
-            byte[] ret = this.receiver.Receive(ref remote);
-            this.Log.AppendText("受信> " + ASCIIEncoding.ASCII.GetString( ret ) + System.Environment.NewLine);
-        }
     }
 }

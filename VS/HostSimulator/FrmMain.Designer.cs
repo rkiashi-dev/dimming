@@ -64,7 +64,6 @@
             this.BtnStart = new System.Windows.Forms.Button();
             this.Log = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -427,10 +426,6 @@
             this.label13.TabIndex = 10;
             this.label13.Text = "ログ";
             // 
-            // backgroundWorker1
-            // 
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
@@ -494,7 +489,6 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox Log;
         private System.Windows.Forms.Label label13;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 
