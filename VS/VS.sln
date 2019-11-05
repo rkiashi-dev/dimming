@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29418.71
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DimmingCommunicationLibrary", "DimmingCommunicationLibrary\DimmingCommunicationLibrary.csproj", "{CFE99EB3-A035-4F7A-9129-129240F557E6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DimmingCommunicationLibraryTests", "DimmingCommunicationLibraryTests\DimmingCommunicationLibraryTests.csproj", "{F3C661AE-C877-4647-8ADC-39600367AF7F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HostConsole", "HostConsole\HostConsole.csproj", "{11D487A4-BCA2-415D-9248-90C173131E2D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DimmingConsole", "DimmingConsole\DimmingConsole.csproj", "{92B1B541-3B6E-43DB-ACF2-AF3F64D6367D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HostSimulator", "HostSimulator\HostSimulator.csproj", "{5F363B00-16B9-466C-82C1-51E45D7BE123}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CFE99EB3-A035-4F7A-9129-129240F557E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFE99EB3-A035-4F7A-9129-129240F557E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFE99EB3-A035-4F7A-9129-129240F557E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFE99EB3-A035-4F7A-9129-129240F557E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3C661AE-C877-4647-8ADC-39600367AF7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3C661AE-C877-4647-8ADC-39600367AF7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3C661AE-C877-4647-8ADC-39600367AF7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3C661AE-C877-4647-8ADC-39600367AF7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11D487A4-BCA2-415D-9248-90C173131E2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11D487A4-BCA2-415D-9248-90C173131E2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11D487A4-BCA2-415D-9248-90C173131E2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11D487A4-BCA2-415D-9248-90C173131E2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92B1B541-3B6E-43DB-ACF2-AF3F64D6367D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92B1B541-3B6E-43DB-ACF2-AF3F64D6367D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92B1B541-3B6E-43DB-ACF2-AF3F64D6367D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92B1B541-3B6E-43DB-ACF2-AF3F64D6367D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F363B00-16B9-466C-82C1-51E45D7BE123}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F363B00-16B9-466C-82C1-51E45D7BE123}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F363B00-16B9-466C-82C1-51E45D7BE123}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F363B00-16B9-466C-82C1-51E45D7BE123}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1776A8A8-CE4C-442F-B4B2-48D879182472}
+	EndGlobalSection
+EndGlobal
