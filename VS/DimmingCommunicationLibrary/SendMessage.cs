@@ -40,7 +40,7 @@ namespace DimmingCommunicationLibrary
                     break;
                 case 発光モード.ストロボモード:
                     message.body = new char[] { 'S' }.Concat(
-                        String.Format("{0:D2}", val).ToUpper().ToCharArray()
+                        String.Format("{0:D2}", (int)val).ToUpper().ToCharArray()
                     ).ToArray();
                     break;
             }
@@ -54,7 +54,7 @@ namespace DimmingCommunicationLibrary
             SendMessage message = new SendMessage();
             message.SetChannel(channel);
 
-            message.body = new char[] { 'F', (isActive ? '1' : '0') };
+            message.body = new char[] { 'L', (isActive ? '1' : '0') };
             message.CalcChecksum();
 
             return message;

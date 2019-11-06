@@ -18,7 +18,7 @@ namespace HostSimulator
         private UdpClient udpSender;
         private TcpListener tcpAcceptor;
         private TcpClient tcpSender;
-        private TcpClient tcpReceiver;
+        private TcpClient tcpReceiver = null ;
 
         public FrmMain()
         {
@@ -41,17 +41,16 @@ namespace HostSimulator
             switch ( this.Protocol.SelectedItem )
             {
                 case "UDP":
-                    this.udpReceiver = new UdpClient(int.Parse(this.ListenPort.Text));
-                    this.udpSender = new UdpClient(remote);
+                    IPEndPoint local = new IPEndPoint(IPAddress.Any, int.Parse(this.ListenPort.Text));
+                    this.udpReceiver = new UdpClient(local);
+                    this.udpSender = new UdpClient();
                     break;
                 case "TCP":
                     this.tcpAcceptor = new TcpListener(int.Parse(this.ListenPort.Text));
                     this.tcpSender = new TcpClient();
                     this.Log.AppendText("開始> クライアントへの接続" + System.Environment.NewLine);
                     this.tcpSender.Connect(remote);
-                    this.Log.AppendText("開始> クライアントからの接続待機" + System.Environment.NewLine);
                     this.tcpAcceptor.Start();
-                    this.tcpReceiver = this.tcpAcceptor.AcceptTcpClient();
                     break;
                 default:
                     this.Log.AppendText("開始> " + this.Protocol.SelectedItem + " はサポートされていません" + System.Environment.NewLine);
@@ -63,20 +62,31 @@ namespace HostSimulator
         {
             this.Log.AppendText("送信> " + ASCIIEncoding.ASCII.GetString(data) + System.Environment.NewLine);
             byte[] ret = null;
-            switch ( this.Protocol.SelectedItem )
+            switch (this.Protocol.SelectedItem)
             {
                 case "UDP":
-                    this.udpSender.Send(data, data.Length);
+                    IPEndPoint send = new IPEndPoint(IPAddress.Parse(this.RemoteAddress.Text), int.Parse(this.RemotePort.Text));
+
+                    this.udpSender.Send(data, data.Length, this.RemoteAddress.Text, int.Parse(this.RemotePort.Text));
 
                     IPEndPoint remote = null;
-                    this.udpReceiver.Receive(ref remote);
+                    ret = this.udpReceiver.Receive(ref remote);
                     this.Log.AppendText("受信> " + ASCIIEncoding.ASCII.GetString(ret) + System.Environment.NewLine);
                     break;
                 case "TCP":
                     NetworkStream input = this.tcpSender.GetStream();
                     input.Write(data, 0, data.Length);
+//                    input.Flush();
+                    /*
+                    if( this.tcpReceiver == null)
+                    {
+                        this.Log.AppendText("開始> クライアントからの接続待機" + System.Environment.NewLine);
+                        this.tcpReceiver = this.tcpAcceptor.AcceptTcpClient();
+                    }
+                    */
 
-                    NetworkStream output = this.tcpReceiver.GetStream();
+                    //                    NetworkStream output = this.tcpReceiver.GetStream();
+                    NetworkStream output = this.tcpSender.GetStream();
                     byte[] tmp = new byte[512];
                     int len = output.Read(tmp, 0, 512);
                     ret = new byte[len];

@@ -37,7 +37,7 @@ namespace DimmingCommunicationLibrary
         public char[] Checksum { get; protected set; }
         protected Direction Direction { get; set ; }
 
-        protected readonly char[] delimiter = new char[]{ Convert.ToChar(0x13), Convert.ToChar(0x10) } ;
+        protected readonly char[] delimiter = new char[]{ Convert.ToChar(13), Convert.ToChar(10) } ;
         public const int 全チャネル指定 = 255;
 
         public void SetChannel( int id )
@@ -55,7 +55,7 @@ namespace DimmingCommunicationLibrary
         public byte[] GetMessage()
         {
             this.CalcChecksum();
-            return this.header.Concat(this.channel).Concat(this.body).Concat(this.Checksum).Select( c=> Convert.ToByte(c)).ToArray();
+            return this.header.Concat(this.channel).Concat(this.body).Concat(this.Checksum).Concat(this.delimiter).Select( c=> Convert.ToByte(c)).ToArray();
         }
 
         protected void CalcChecksum()
