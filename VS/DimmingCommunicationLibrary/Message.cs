@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Linq;
 
 namespace DimmingCommunicationLibrary
@@ -56,6 +57,16 @@ namespace DimmingCommunicationLibrary
         {
             this.CalcChecksum();
             return this.header.Concat(this.channel).Concat(this.body).Concat(this.Checksum).Concat(this.delimiter).Select( c=> Convert.ToByte(c)).ToArray();
+        }
+
+        public string ToCLangStr()
+        {
+            byte[] r = this.GetMessage();
+            return string.Join( ", ", r.Select(c => String.Format("0x{0:X2}", Convert.ToInt32(c))));
+        }
+        public string ToASCII()
+        {
+            return Encoding.ASCII.GetString( this.GetMessage() );
         }
 
         protected void CalcChecksum()
